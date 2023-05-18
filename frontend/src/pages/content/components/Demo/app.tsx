@@ -119,6 +119,32 @@ class ConversationExtractor {
   }
 }
 
+class JobListingExtractor {
+  meta: Domain;
+
+  constructor(meta: Domain) {
+    this.meta = meta;
+  }
+
+  init() {
+    chrome?.runtime?.sendMessage({
+      type: MESSAGES.CONTENT.JOB_LISTING,
+      content: {
+        company: document
+          .querySelector(this.meta.companySelector)
+          .textContent.replace(/\s+/g, " ")
+          .replace('"', "")
+          .trim(),
+        description: document
+          .querySelector(this.meta.bodySelector)
+          .textContent.replace(/\s+/g, " ")
+          .replace('"', "")
+          .trim(),
+      },
+    });
+  }
+}
+
 class ExtractorFactory {
   parseUrl(): string {
     return window.location.hostname;
@@ -135,6 +161,8 @@ class ExtractorFactory {
         return new EmailExtractor(websiteInfo);
       case "conversation":
         return new ConversationExtractor(websiteInfo);
+      case "job-listing":
+        return new JobListingExtractor(websiteInfo);
       default:
         break;
     }
