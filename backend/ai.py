@@ -122,8 +122,8 @@ def process_conversation(conversation_request: ConversationRequest) -> Result:
     The conversation is formated as a list as follows
 
     [
-        "in": "<message>",
-        "out: "<message>",
+        "[in] <message>",
+        "[out] <message>",
         .
         .
         .
