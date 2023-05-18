@@ -72,11 +72,10 @@ def create_user(user: User):
 def login(credentials: HTTPBasicCredentials = Depends(security)):
     with Session(engine) as session:
         user = authenticate_user(session, credentials.username, credentials.password)
-    response = RedirectResponse(url="/", status_code=303)
     response.set_cookie(
         key="email", value=user.email, httponly=True, max_age=1800, expires=1800
     )
-    return response
+    return {"status": "success", "email": user.email}
 
 
 @app.post("/reports")
