@@ -193,6 +193,17 @@ def process_job_listing(job_listing_request: ai.JobListingRequest):
     return response
 
 
+@app.post("/ai/conversation", response_model=ai.Result, tags=["ai"])
+def process_conversation(conversation_request: ai.ConversationRequest):
+    response = ai.process_conversation(conversation_request)
+    log_usage(
+        conversation_request.user_email,
+        "/ai/conversation",
+        response.probability,
+    )
+    return response
+
+
 @app.get("/stats/user", tags=["stats"])
 def get_user_stats(user_email: str):
     with Session(engine) as session:
