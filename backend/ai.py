@@ -17,13 +17,20 @@ def get_completion(prompt, model="gpt-3.5-turbo"):
 
 
 class EmailRequest(BaseModel):
+    user_email: str
     body: str
 
 
 class MarketplaceRequest(BaseModel):
+    user_email: str
     description: str
     marketplace_name: str
     seller_name: str
+
+
+class JobListingRequest(BaseModel):
+    user_email: str
+    description: str
 
 
 class Result(BaseModel):
@@ -74,3 +81,31 @@ def process_marketplace(marketplace_request: MarketplaceRequest) -> Result:
     completion = get_completion(prompt)
     marketplace_result = Result.parse_raw(completion)
     return marketplace_result
+
+
+def process_job_listing(email_request: JobListingRequest) -> Result:
+    prompt = f"""
+    The text delimited with triple backticks is a job description.
+    Determine a probability (percentage from 0 to 100) of this product being a fraud.
+    Provide some brief reasons why (maximum 3).
+
+    Watch out for:
+    - payment requests
+    - spelling mistakes
+    - high salary for easy work
+    - lack of contact information
+
+    Provide the response in a dictionary format like this:
+    {{
+        "probability": <probability>,
+        "reasons": [
+            "<reason 1>",
+            "<reason 2>",
+            "<reason 3>"
+        ]
+    }}
+    ```{email_request.body}```
+    """
+    completion = get_completion(prompt)
+    email_result = Result.parse_raw(completion)
+    return email_result
