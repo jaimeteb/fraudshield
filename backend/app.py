@@ -7,6 +7,8 @@ from passlib.context import CryptContext
 import uuid
 import uvicorn
 
+import ai
+
 from typing import Optional
 from datetime import datetime
 
@@ -91,6 +93,19 @@ def create_report(report: Report, email: str = Cookie(None)):
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+
+
+# AI stuff below
+
+
+@app.post("/ai/email_body", response_model=ai.Result)
+def process_email_body(email_request: ai.EmailRequest):
+    return ai.process_email_body(email_request)
+
+
+@app.post("/ai/marketplace", response_model=ai.Result)
+def process_marketplace(marketplace_request: ai.MarketplaceRequest):
+    return ai.process_marketplace(marketplace_request)
 
 
 uvicorn.run(app, host="localhost", port=8000, debug=True)
