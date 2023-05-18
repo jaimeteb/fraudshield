@@ -48,7 +48,13 @@ function LoginForm() {
         placeholder="E-mail"
         type="email"
         value={formik.values.email}
-        variant="outlined"
+        size="small"
+        variant="filled"
+        sx={{
+          input: {
+            pt: "12px",
+          },
+        }}
       />
       <TextField
         autoComplete="off"
@@ -61,6 +67,13 @@ function LoginForm() {
         placeholder="Password"
         type="password"
         value={formik.values.password}
+        size="small"
+        variant="filled"
+        sx={{
+          input: {
+            pt: "12px",
+          },
+        }}
       />
       <Stack direction="column" gap={2} sx={{ mt: 2 }}>
         <Button

@@ -2,7 +2,7 @@ import React from "react";
 import "@pages/popup/Popup.css";
 import { theme } from "../common/styles";
 import { ThemeProvider } from "@mui/material/styles";
-import { Box, Typography, Stack } from "@mui/material";
+import { Box, Typography, Stack, Button } from "@mui/material";
 import { storageKey } from "../common/constants";
 import { Signin } from "./components/Signin";
 
@@ -30,13 +30,36 @@ const Popup = () => {
     chrome.storage.onChanged.addListener(listener);
   }, []);
 
+  const handleLogout = React.useCallback(() => {
+    chrome.storage.sync.set({ [storageKey]: null });
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
-      <Stack direction="column" gap="20px" margin="20px">
+      <Stack
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        gap="10px"
+        sx={{
+          minHeight: "150px",
+          p: "20px",
+          background: "radial-gradient(circle at 18.7% 37.8%, rgb(250, 250, 250) 0%, rgb(225, 234, 238) 90%)",
+        }}
+      >
         <Box component="header">
-          {/* <img src={logo} className="App-logo" alt="logo" /> */}
+          {email ? (
+            <Typography
+              variant="h5"
+              sx={{
+                textAlign: "center",
+              }}
+            >
+              Welcome to FraudShield
+            </Typography>
+          ) : null}
           <Typography
-            variant="h5"
+            variant="body1"
             sx={{
               textAlign: "center",
             }}
@@ -44,7 +67,13 @@ const Popup = () => {
             {email ? `Hi, ${email}` : "Sign in to continue"}
           </Typography>
         </Box>
-        {email ? null : <Signin />}
+        {email ? (
+          <Button onClick={handleLogout} variant="contained">
+            Sign out
+          </Button>
+        ) : (
+          <Signin />
+        )}
       </Stack>
     </ThemeProvider>
   );
