@@ -22,6 +22,8 @@ engine = create_engine("sqlite:///data.db")
 
 app = FastAPI()
 
+FRAUD_THRESHOLD = 50
+
 
 class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -157,3 +159,32 @@ def process_job_listing(job_listing_request: ai.JobListingRequest):
         response.probability,
     )
     return response
+
+
+@app.get("/stats/user", tags=["stats"])
+def get_user_stats(user_email: str):
+    with Session(engine) as session:
+        user = get_user(session, user_email)
+        usage_logs = session.query(UsageLog).filter(UsageLog.user_id == user.id).all()
+        reports = session.query(Report).filter(Report.user_id == user.id).all()
+    return {
+        "amount_used": len(usage_logs),
+        "amount_fraud": len(
+            [log for log in usage_logs if log.fraud_probability >= FRAUD_THRESHOLD]
+        ),
+        "amount_reported": len(reports),
+    }
+
+
+@app.get("/stats/all", tags=["stats"])
+def get_all_stats():
+    with Session(engine) as session:
+        usage_logs = session.query(UsageLog).all()
+        reports = session.query(Report).all()
+    return {
+        "amount_used": len(usage_logs),
+        "amount_fraud": len(
+            [log for log in usage_logs if log.fraud_probability >= FRAUD_THRESHOLD]
+        ),
+        "amount_reported": len(reports),
+    }
