@@ -83,6 +83,40 @@ class EmailExtractor {
   }
 }
 
+class ConversationExtractor {
+  meta: Domain;
+
+  constructor(meta: Domain) {
+    this.meta = meta;
+  }
+
+  init() {
+    let messagesIn = document.querySelectorAll(this.meta.messageInSelector);
+    let messagesOut = document.querySelectorAll(this.meta.messageOutSelector);
+
+    let messages = Array.from(messagesIn).concat(Array.from(messagesOut));
+
+    // sort based on appearance order in the document
+    messages.sort(function (a, b) {
+      return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ?
+        -1 : 1;
+    });
+
+    let contents = messages.map(message =>
+      message.textContent.replace(/\s+/g, " ")
+        .replace('"', "")
+        .trim()
+    );
+
+    chrome?.runtime?.sendMessage({
+      type: MESSAGES.CONTENT.CONVERSATION,
+      content: {
+        messages: contents,
+      },
+    });
+  }
+}
+
 class ExtractorFactory {
   parseUrl(): string {
     return window.location.hostname;
@@ -97,6 +131,8 @@ class ExtractorFactory {
         return new MarketplaceExtractor(websiteInfo);
       case "email":
         return new EmailExtractor(websiteInfo);
+      case "conversation":
+        return new ConversationExtractor(websiteInfo);
       default:
         break;
     }

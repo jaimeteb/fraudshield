@@ -5,6 +5,7 @@ export const MESSAGES = {
   CONTENT: {
     MARKETPLACE: "fs-marketplace",
     EMAIL: "fs-email",
+    CONVERSATION: "fs-conversation",
   },
   BACKGROUND: "fs-ai-result",
 };
@@ -21,6 +22,8 @@ export interface Domain {
   sellerName?: string;
   sellerSelector?: string;
   bodySelector?: string;
+  messageInSelector?: string;
+  messageOutSelector?: string;
 }
 
 export const domains: Domain[] = [
@@ -37,5 +40,11 @@ export const domains: Domain[] = [
     hostname: "mail.google.com",
     type: "email",
     bodySelector: ".ii.gt",
+  },
+  {
+    hostname: "web.whatsapp.com",
+    type: "conversation",
+    messageInSelector: ".message-in",
+    messageOutSelector: ".message-out",
   },
 ];

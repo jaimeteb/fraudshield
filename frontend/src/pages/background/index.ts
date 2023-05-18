@@ -15,6 +15,7 @@ const ROUTES = {
   SIGNIN: "/login",
   MARKETPLACE: "/ai/marketplace",
   EMAIL: "/ai/email_body",
+  CONVERSATION: "/ai/conversation",
 };
 
 type MessageType = {
@@ -96,6 +97,10 @@ const handleEmail = async (body: string) => {
   }
 };
 
+const handleConversation = async () => {
+  // TODO: implement
+};
+
 chrome.runtime.onMessage.addListener(async function (
   message: MessageType,
   sender,
@@ -116,6 +121,10 @@ chrome.runtime.onMessage.addListener(async function (
       break;
     case MESSAGES.CONTENT.EMAIL:
       handleEmail(content.body);
+      break;
+    case MESSAGES.CONTENT.CONVERSATION:
+      console.log(content);
+      // TODO: fix
       break;
     default:
       break;
