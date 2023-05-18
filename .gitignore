@@ -1,0 +1,17 @@
+frontend/node_modules/
+
+# testing
+frontend/coverage
+
+# build
+frontend/dist
+
+# etc
+.DS_Store
+.env.local
+.idea
+
+# compiled
+frontend/utils/reload/*.js
+frontend/utils/reload/injections/*.js
+frontend/public/manifest.json

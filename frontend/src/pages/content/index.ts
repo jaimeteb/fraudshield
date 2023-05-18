@@ -9,7 +9,6 @@ window.addEventListener(
 );
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log(message);
   if (message.action) {
     window.dispatchEvent(new CustomEvent("PassToInjected", { detail: "to injected" }));
   }

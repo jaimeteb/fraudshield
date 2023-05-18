@@ -83,7 +83,7 @@ def process_marketplace(marketplace_request: MarketplaceRequest) -> Result:
             "<reason 3>"
         ]
     }}
-    ```{description}```
+    ```{marketplace_request.description}```
     """
     completion = get_completion(prompt)
     return Result.parse_raw(completion)

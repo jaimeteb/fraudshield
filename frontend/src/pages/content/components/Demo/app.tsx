@@ -94,10 +94,21 @@ class ConversationExtractor {
     let messagesIn = document.querySelectorAll(this.meta.messageInSelector);
     let messagesOut = document.querySelectorAll(this.meta.messageOutSelector);
 
-    messagesIn.forEach((m) => (m.textContent = `[in] ${m.textContent}`));
-    messagesOut.forEach((m) => (m.textContent = `[out] ${m.textContent}`));
+    const clonedMessagesIn = [];
+    const clonedMessagesOut = [];
 
-    let messages = Array.from(messagesIn).concat(Array.from(messagesOut));
+    messagesIn.forEach((m) => {
+      const clonedNode = m.cloneNode(true);
+      clonedNode.textContent = `[in] ${m.textContent}`;
+      clonedMessagesIn.push(clonedNode);
+    });
+    messagesOut.forEach((m) => {
+      const clonedNode = m.cloneNode(true);
+      clonedNode.textContent = `[out] ${m.textContent}`;
+      clonedMessagesOut.push(clonedNode);
+    });
+
+    let messages = clonedMessagesIn.concat(clonedMessagesOut);
 
     // sort based on appearance order in the document
     messages.sort(function (a, b) {

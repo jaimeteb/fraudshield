@@ -24,6 +24,21 @@ type MessageType = {
   content: any;
 };
 
+const getUserEmail = async () => {
+  const res = await chrome.storage.sync.get(storageKey);
+  return res[storageKey];
+};
+
+const sendAiResult = (result: any) => {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.sendMessage(
+      tabs[0].id,
+      { type: MESSAGES.BACKGROUND, content: result },
+      function (response) {}
+    );
+  });
+};
+
 const handleSignIn = async (email: string, password: string) => {
   const res = await fetch(`${BASE}${ROUTES.SIGNIN}`, {
     method: "POST",
@@ -43,13 +58,15 @@ const handleMarketPlace = async (
   sellerName: string
 ) => {
   chrome.storage.sync.set({ [statusKey]: "loading" });
-  // TODO: email body
+  const userEmail = await getUserEmail();
+
   const res = await fetch(`${BASE}${ROUTES.MARKETPLACE}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
+      user_email: userEmail,
       description: description,
       marketplace_name: marketplaceName,
       seller_name: sellerName,
@@ -57,24 +74,9 @@ const handleMarketPlace = async (
   });
   if (res.ok) {
     const data = await res.json();
-    console.log(data);
+    sendAiResult(data);
     chrome.storage.sync.set({ [statusKey]: "idle" });
   }
-};
-
-const getUserEmail = async () => {
-  const res = await chrome.storage.sync.get(storageKey);
-  return res[storageKey];
-};
-
-const sendAiResult = (result: any) => {
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.sendMessage(
-      tabs[0].id,
-      { type: MESSAGES.BACKGROUND, content: result },
-      function (response) {}
-    );
-  });
 };
 
 const handleEmail = async (body: string) => {
@@ -108,7 +110,7 @@ const handleConversation = async (messages: string[]) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      conversation: messages,
+      conversation: messages.join(" "),
       user_email: userEmail,
     }),
   });
@@ -136,9 +138,9 @@ const handleJobListing = async (description: string, company: string) => {
   });
   if (res.ok) {
     const data = await res.json();
-    console.log(data);
     chrome.storage.sync.set({ [statusKey]: "idle" });
-  }  // TODO: implement
+    sendAiResult(data);
+  }
 };
 
 chrome.runtime.onMessage.addListener(async function (
