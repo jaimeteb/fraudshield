@@ -58,6 +58,11 @@ class ReportRequest(BaseModel):
     details: str
 
 
+class CrowdsourceRequest(BaseModel):
+    fraud_email: str = ""
+    fraud_website: str = ""
+
+
 def get_user(db: Session, email: str):
     user = db.query(User).filter(User.email == email).first()
     if user is None:
@@ -112,6 +117,33 @@ def create_report(report_request: ReportRequest):
         session.commit()
         session.refresh(report)
     return report
+
+
+@app.post("/crowdsource/analyze", tags=["reports"])
+def crowdsource_analyze(crowd_request: CrowdsourceRequest):
+    with Session(engine) as session:
+        email_reports = (
+            len(
+                session.query(Report)
+                .filter(Report.fraud_email == crowd_request.fraud_email)
+                .all()
+            )
+            if crowd_request.fraud_email
+            else 0
+        )
+        website_reports = (
+            len(
+                session.query(Report)
+                .filter(Report.fraud_website == crowd_request.fraud_website)
+                .all()
+            )
+            if crowd_request.fraud_website
+            else 0
+        )
+    return {
+        "email_reports": email_reports,
+        "website_reports": website_reports,
+    }
 
 
 def log_usage(user_email: str, endpoint: str, fraud_probability: int):
