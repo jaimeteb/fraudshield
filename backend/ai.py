@@ -33,6 +33,7 @@ class MarketplaceRequest(BaseModel):
 class JobListingRequest(BaseModel):
     user_email: str
     description: str
+    company: str
 
 
 class Result(BaseModel):
@@ -90,7 +91,7 @@ def process_marketplace(marketplace_request: MarketplaceRequest) -> Result:
 
 def process_job_listing(job_listing_request: JobListingRequest) -> Result:
     prompt = f"""
-    The text delimited with triple backticks is a job description.
+    The text delimited with triple backticks is a job description from the company {job_listing_request.company}.
     Determine a probability (percentage from 0 to 100) of this job listing being a fraud.
     Provide some brief reasons why (maximum 3).
 
@@ -109,7 +110,7 @@ def process_job_listing(job_listing_request: JobListingRequest) -> Result:
             "<reason 3>"
         ]
     }}
-    ```{job_listing_request.body}```
+    ```{job_listing_request.description}```
     """
     completion = get_completion(prompt)
     return Result.parse_raw(completion)
@@ -118,17 +119,17 @@ def process_job_listing(job_listing_request: JobListingRequest) -> Result:
 def process_conversation(conversation_request: ConversationRequest) -> Result:
     prompt = f"""
     The text delimited with triple backticks is a messaging application conversation.
-    The conversation is formated in a JSON as follows
+    The conversation is formated as a list as follows
 
-    {{
-        "here": "<message>",
-        "there: "<message>",
+    [
+        "in": "<message>",
+        "out: "<message>",
         .
         .
         .
-    }}
+    ]
 
-    where "here" represents the potential victim, and the responses are from "there".
+    where "out" represents the outgoing messages from the potential victim, and the responses are labeled "in", for incoming.
 
     Determine a probability (percentage from 0 to 100) of this conversation being fraud, scam or phishing.
     Provide some brief reasons why (maximum 3).

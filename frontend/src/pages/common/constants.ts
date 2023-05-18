@@ -6,6 +6,7 @@ export const MESSAGES = {
     MARKETPLACE: "fs-marketplace",
     EMAIL: "fs-email",
     CONVERSATION: "fs-conversation",
+    JOB_LISTING: "fs-job-listing",
   },
 };
 
@@ -23,6 +24,7 @@ export interface Domain {
   bodySelector?: string;
   messageInSelector?: string;
   messageOutSelector?: string;
+  companySelector?: string;
 }
 
 export const domains: Domain[] = [
@@ -46,4 +48,10 @@ export const domains: Domain[] = [
     messageInSelector: ".message-in",
     messageOutSelector: ".message-out",
   },
+  {
+    hostname: "www.linkedin.com",
+    type: "job-listing",
+    companySelector: ".jobs-unified-top-card__company-name",
+    bodySelector: "#job-details",
+  }
 ];

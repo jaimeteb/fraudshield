@@ -16,6 +16,7 @@ const ROUTES = {
   MARKETPLACE: "/ai/marketplace",
   EMAIL: "/ai/email_body",
   CONVERSATION: "/ai/conversation",
+  JOB_LISTING: "/ai/job_listing",
 };
 
 type MessageType = {
@@ -91,6 +92,28 @@ const handleConversation = async () => {
   // TODO: implement
 };
 
+const handleJobListing = async (description: string, company: string) => {
+  chrome.storage.sync.set({ [statusKey]: "loading" });
+  const userEmail = await getUserEmail();
+
+  const res = await fetch(`${BASE}${ROUTES.JOB_LISTING}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      description: description,
+      company: company,
+      user_email: userEmail,
+    }),
+  });
+  if (res.ok) {
+    const data = await res.json();
+    console.log(data);
+    chrome.storage.sync.set({ [statusKey]: "idle" });
+  }  // TODO: implement
+};
+
 chrome.runtime.onMessage.addListener(async function (
   message: MessageType,
   sender,
@@ -115,6 +138,9 @@ chrome.runtime.onMessage.addListener(async function (
     case MESSAGES.CONTENT.CONVERSATION:
       console.log(content);
       // TODO: fix
+      break;
+    case MESSAGES.CONTENT.JOB_LISTING:
+      handleJobListing(content.description, content.company);
       break;
     default:
       break;
