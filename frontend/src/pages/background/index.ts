@@ -15,6 +15,7 @@ const ROUTES = {
   SIGNIN: "/login",
   MARKETPLACE: "/ai/marketplace",
   EMAIL: "/ai/email_body",
+  CONVERSATION: "/ai/conversation",
 };
 
 type MessageType = {
@@ -60,9 +61,15 @@ const handleMarketPlace = async (
   }
 };
 
+const getUserEmail = async () => {
+  const res = await chrome.storage.sync.get(storageKey);
+  return res[storageKey];
+};
+
 const handleEmail = async (body: string) => {
   chrome.storage.sync.set({ [statusKey]: "loading" });
-  // TODO: email body
+  const userEmail = await getUserEmail();
+
   const res = await fetch(`${BASE}${ROUTES.EMAIL}`, {
     method: "POST",
     headers: {
@@ -70,6 +77,7 @@ const handleEmail = async (body: string) => {
     },
     body: JSON.stringify({
       body,
+      user_email: userEmail,
     }),
   });
   if (res.ok) {
@@ -77,6 +85,10 @@ const handleEmail = async (body: string) => {
     console.log(data);
     chrome.storage.sync.set({ [statusKey]: "idle" });
   }
+};
+
+const handleConversation = async () => {
+  // TODO: implement
 };
 
 chrome.runtime.onMessage.addListener(async function (
@@ -99,6 +111,10 @@ chrome.runtime.onMessage.addListener(async function (
       break;
     case MESSAGES.CONTENT.EMAIL:
       handleEmail(content.body);
+      break;
+    case MESSAGES.CONTENT.CONVERSATION:
+      console.log(content);
+      // TODO: fix
       break;
     default:
       break;
