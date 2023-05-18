@@ -106,6 +106,3 @@ def process_email_body(email_request: ai.EmailRequest):
 @app.post("/ai/marketplace", response_model=ai.Result)
 def process_marketplace(marketplace_request: ai.MarketplaceRequest):
     return ai.process_marketplace(marketplace_request)
-
-
-uvicorn.run(app, host="localhost", port=8000, debug=True)
