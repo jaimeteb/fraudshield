@@ -12,6 +12,7 @@ import { zIndexManager } from "@src/pages/content/services/z-index";
 import { StickyIcon } from "../StickyIcon";
 import { ReportForm } from "../ReportForm";
 import { AnalyzeForm } from "../AnalyzeForm";
+import { Stats } from "../Stats";
 
 function ResultPopup() {
   const [aiResult, setAiResult] = React.useState(null);
@@ -86,6 +87,7 @@ function ResultPopup() {
               Analyze
             </Button>
           </Stack>
+          <Stats />
         </>
       )}
     </Box>

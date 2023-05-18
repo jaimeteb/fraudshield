@@ -1,5 +1,12 @@
 import reloadOnUpdate from "virtual:reload-on-update-in-background-script";
-import { MESSAGES, storageKey, statusKey } from "../common/constants";
+import {
+  MESSAGES,
+  storageKey,
+  statusKey,
+  statsUsed,
+  statsFraud,
+  statsReported,
+} from "../common/constants";
 
 reloadOnUpdate("pages/background");
 
@@ -19,6 +26,7 @@ const ROUTES = {
   JOB_LISTING: "/ai/job_listing",
   REPORTS: "/reports",
   ANALYZE: "/crowdsource/analyze",
+  GET_STATS: "/stats/user",
 };
 
 type MessageType = {
@@ -179,7 +187,6 @@ const handleReportForm = async ({ fraudEmail, fraudWebsite, details }) => {
 
 const handleAnalyzeForm = async ({ fraudEmail, fraudWebsite }) => {
   chrome.storage.sync.set({ [statusKey]: "loading" });
-  const userEmail = await getUserEmail();
 
   const res = await fetch(`${BASE}${ROUTES.ANALYZE}`, {
     method: "POST",
@@ -195,6 +202,25 @@ const handleAnalyzeForm = async ({ fraudEmail, fraudWebsite }) => {
     const data = await res.json();
     chrome.storage.sync.set({ [statusKey]: "idle" });
     sendAiAnalyzeResult(data);
+  }
+};
+
+const handleStats = async () => {
+  const userEmail = await getUserEmail();
+
+  const res = await fetch(
+    `${BASE}${ROUTES.GET_STATS}?` +
+      new URLSearchParams({
+        user_email: userEmail,
+      })
+  );
+  if (res.ok) {
+    const data = await res.json();
+    chrome.storage.sync.set({
+      [statsUsed]: data.amount_used,
+      [statsFraud]: data.amount_fraud,
+      [statsReported]: data.amount_reported,
+    });
   }
 };
 
@@ -230,6 +256,9 @@ chrome.runtime.onMessage.addListener(async function (
       break;
     case MESSAGES.ANALYZE_FORM:
       handleAnalyzeForm(content);
+      break;
+    case MESSAGES.GET_STATS:
+      handleStats();
       break;
     default:
       break;

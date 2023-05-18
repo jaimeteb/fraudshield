@@ -12,10 +12,14 @@ export const MESSAGES = {
   REPORT_FORM: "fs-report-form",
   ANALYZE_FORM: "fs-analyze-form",
   BACKGROUND_ANALYZE: "fs-ai-result-analyze",
+  GET_STATS: "fs-get-stats",
 };
 
 export const storageKey = "fs-token";
 export const statusKey = "fs-status";
+export const statsUsed = "fs-stats-used";
+export const statsFraud = "fs-stats-fraud";
+export const statsReported = "fs-stats-reported";
 
 export interface Domain {
   hostname?: string;
