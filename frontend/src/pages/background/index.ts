@@ -97,8 +97,25 @@ const handleEmail = async (body: string) => {
   }
 };
 
-const handleConversation = async () => {
-  // TODO: implement
+const handleConversation = async (messages: string[]) => {
+  chrome.storage.sync.set({ [statusKey]: "loading" });
+  const userEmail = await getUserEmail();
+
+  const res = await fetch(`${BASE}${ROUTES.CONVERSATION}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      conversation: messages,
+      user_email: userEmail,
+    }),
+  });
+  if (res.ok) {
+    const data = await res.json();
+    chrome.storage.sync.set({ [statusKey]: "idle" });
+    sendAiResult(data);
+  }
 };
 
 chrome.runtime.onMessage.addListener(async function (
@@ -123,8 +140,7 @@ chrome.runtime.onMessage.addListener(async function (
       handleEmail(content.body);
       break;
     case MESSAGES.CONTENT.CONVERSATION:
-      console.log(content);
-      // TODO: fix
+      handleConversation(content.messages);
       break;
     default:
       break;

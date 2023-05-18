@@ -94,18 +94,20 @@ class ConversationExtractor {
     let messagesIn = document.querySelectorAll(this.meta.messageInSelector);
     let messagesOut = document.querySelectorAll(this.meta.messageOutSelector);
 
+    messagesIn.forEach((m) => (m.textContent = `[in] ${m.textContent}`));
+    messagesOut.forEach((m) => (m.textContent = `[out] ${m.textContent}`));
+
     let messages = Array.from(messagesIn).concat(Array.from(messagesOut));
 
     // sort based on appearance order in the document
     messages.sort(function (a, b) {
-      return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ?
-        -1 : 1;
+      return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING
+        ? -1
+        : 1;
     });
 
-    let contents = messages.map(message =>
-      message.textContent.replace(/\s+/g, " ")
-        .replace('"', "")
-        .trim()
+    let contents = messages.map((message) =>
+      message.textContent.replace(/\s+/g, " ").replace('"', "").trim()
     );
 
     chrome?.runtime?.sendMessage({
@@ -163,16 +165,6 @@ function StickyIcon() {
   }, []);
 
   React.useEffect(() => {
-    /**
-     * background script listener
-     */
-    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-      if (message.type === MESSAGES.BACKGROUND) {
-        console.log(message);
-      }
-      sendResponse();
-    });
-
     const listener = (changes: {
       [key: string]: chrome.storage.StorageChange;
     }) => {

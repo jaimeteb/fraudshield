@@ -44,7 +44,7 @@ export const domains: Domain[] = [
   {
     hostname: "web.whatsapp.com",
     type: "conversation",
-    messageInSelector: ".message-in",
-    messageOutSelector: ".message-out",
+    messageInSelector: ".message-in .selectable-text",
+    messageOutSelector: ".message-out .selectable-text",
   },
 ];
