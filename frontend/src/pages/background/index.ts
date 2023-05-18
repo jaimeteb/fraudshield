@@ -17,6 +17,8 @@ const ROUTES = {
   EMAIL: "/ai/email_body",
   CONVERSATION: "/ai/conversation",
   JOB_LISTING: "/ai/job_listing",
+  REPORTS: "/reports",
+  ANALYZE: "/crowdsource/analyze",
 };
 
 type MessageType = {
@@ -34,6 +36,16 @@ const sendAiResult = (result: any) => {
     chrome.tabs.sendMessage(
       tabs[0].id,
       { type: MESSAGES.BACKGROUND, content: result },
+      function (response) {}
+    );
+  });
+};
+
+const sendAiAnalyzeResult = (result: any) => {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.sendMessage(
+      tabs[0].id,
+      { type: MESSAGES.BACKGROUND_ANALYZE, content: result },
       function (response) {}
     );
   });
@@ -143,6 +155,49 @@ const handleJobListing = async (description: string, company: string) => {
   }
 };
 
+const handleReportForm = async ({ fraudEmail, fraudWebsite, details }) => {
+  chrome.storage.sync.set({ [statusKey]: "loading" });
+  const userEmail = await getUserEmail();
+
+  const res = await fetch(`${BASE}${ROUTES.REPORTS}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      fraud_email: fraudEmail,
+      fraud_website: fraudWebsite,
+      details: details,
+      user_email: userEmail,
+    }),
+  });
+  if (res.ok) {
+    const data = await res.json();
+    chrome.storage.sync.set({ [statusKey]: "idle" });
+  }
+};
+
+const handleAnalyzeForm = async ({ fraudEmail, fraudWebsite }) => {
+  chrome.storage.sync.set({ [statusKey]: "loading" });
+  const userEmail = await getUserEmail();
+
+  const res = await fetch(`${BASE}${ROUTES.ANALYZE}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      fraud_email: fraudEmail,
+      fraud_website: fraudWebsite,
+    }),
+  });
+  if (res.ok) {
+    const data = await res.json();
+    chrome.storage.sync.set({ [statusKey]: "idle" });
+    sendAiAnalyzeResult(data);
+  }
+};
+
 chrome.runtime.onMessage.addListener(async function (
   message: MessageType,
   sender,
@@ -170,20 +225,15 @@ chrome.runtime.onMessage.addListener(async function (
     case MESSAGES.CONTENT.JOB_LISTING:
       handleJobListing(content.description, content.company);
       break;
+    case MESSAGES.REPORT_FORM:
+      handleReportForm(content);
+      break;
+    case MESSAGES.ANALYZE_FORM:
+      handleAnalyzeForm(content);
+      break;
     default:
       break;
   }
-
-  // if (message === "test") {
-  //   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-  //     chrome.tabs.sendMessage(
-  //       tabs[0].id,
-  //       { action: "open_dialog_box" },
-  //       function (response) {}
-  //     );
-  //   });
-  // }
-
   sendResponse();
 });
 

@@ -9,6 +9,9 @@ export const MESSAGES = {
     JOB_LISTING: "fs-job-listing",
   },
   BACKGROUND: "fs-ai-result",
+  REPORT_FORM: "fs-report-form",
+  ANALYZE_FORM: "fs-analyze-form",
+  BACKGROUND_ANALYZE: "fs-ai-result-analyze",
 };
 
 export const storageKey = "fs-token";
@@ -54,5 +57,5 @@ export const domains: Domain[] = [
     type: "job-listing",
     companySelector: ".jobs-unified-top-card__company-name",
     bodySelector: "#job-details",
-  }
+  },
 ];
