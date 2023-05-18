@@ -3,6 +3,7 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.responses import RedirectResponse
 from sqlmodel import create_engine, SQLModel, Session, Field
 from passlib.context import CryptContext
+from pydantic import BaseModel
 
 import uuid
 import uvicorn
@@ -34,9 +35,17 @@ class User(SQLModel, table=True):
 class Report(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     user_id: int = Field(foreign_key="user.id")
-    title: str
-    content: str
+    fraud_email: str
+    fraud_website: str
+    details: str
     created_at: str
+
+
+class ReportRequest(BaseModel):
+    user_email: str
+    fraud_email: str = ""
+    fraud_website: str = ""
+    details: str
 
 
 def get_user(db: Session, email: str):
@@ -58,7 +67,7 @@ def on_startup():
     SQLModel.metadata.create_all(engine)
 
 
-@app.post("/signup")
+@app.post("/signup", tags=["auth"])
 def create_user(user: User):
     with Session(engine) as session:
         user.hashed_password = crypt_context.hash(user.hashed_password)
@@ -68,7 +77,7 @@ def create_user(user: User):
     return {"status": "success", "email": user.email}
 
 
-@app.post("/login")
+@app.post("/login", tags=["auth"])
 def login(credentials: HTTPBasicCredentials = Depends(security)):
     with Session(engine) as session:
         user = authenticate_user(session, credentials.username, credentials.password)
@@ -78,35 +87,36 @@ def login(credentials: HTTPBasicCredentials = Depends(security)):
     return {"status": "success", "email": user.email}
 
 
-@app.post("/reports")
-def create_report(report: Report, email: str = Cookie(None)):
+@app.post("/reports", tags=["reports"])
+def create_report(report_request: ReportRequest):
     with Session(engine) as session:
-        user = get_user(session, email)
-        report.user_id = user.id
+        user = get_user(session, report_request.user_email)
+        report = Report(
+            fraud_email=report_request.fraud_email,
+            fraud_website=report_request.fraud_website,
+            details=report_request.details,
+            created_at=datetime.now().isoformat(),
+            user_id=user.id,
+        )
         session.add(report)
         session.commit()
         session.refresh(report)
     return report
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-
 # AI stuff below
 
 
-@app.post("/ai/email_body", response_model=ai.Result)
+@app.post("/ai/email_body", response_model=ai.Result, tags=["ai"])
 def process_email_body(email_request: ai.EmailRequest):
     return ai.process_email_body(email_request)
 
 
-@app.post("/ai/marketplace", response_model=ai.Result)
+@app.post("/ai/marketplace", response_model=ai.Result, tags=["ai"])
 def process_marketplace(marketplace_request: ai.MarketplaceRequest):
     return ai.process_marketplace(marketplace_request)
 
 
-@app.post("/ai/job_listing", response_model=ai.Result)
+@app.post("/ai/job_listing", response_model=ai.Result, tags=["ai"])
 def process_job_listing(job_listing_request: ai.JobListingRequest):
     return ai.process_job_listing(job_listing_request)
