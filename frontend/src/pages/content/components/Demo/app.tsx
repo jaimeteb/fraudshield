@@ -4,7 +4,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 import { useEffect } from "react";
-import { Box } from "@mui/material";
+import { Box, Typography, Stack } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "@src/pages/common/styles";
 import React from "react";
@@ -127,6 +127,16 @@ function StickyIcon() {
   }, []);
 
   React.useEffect(() => {
+    /**
+     * background script listener
+     */
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      if (message.type === MESSAGES.BACKGROUND) {
+        console.log(message);
+      }
+      sendResponse();
+    });
+
     const listener = (changes: {
       [key: string]: chrome.storage.StorageChange;
     }) => {
@@ -155,6 +165,9 @@ function StickyIcon() {
         right: "50px",
         zIndex: zIndexManager.get(),
         borderRadius: "50%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         backgroundColor: "lightcoral",
         transition: "all 300ms",
         "&:hover": {
@@ -170,14 +183,60 @@ function StickyIcon() {
   );
 }
 
-export default function App() {
-  useEffect(() => {
-    console.log("content view loaded");
+function ResultPopup() {
+  const [aiResult, setAiResult] = React.useState(null);
+
+  React.useEffect(() => {
+    /**
+     * background script listener
+     */
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      if (message.type === MESSAGES.BACKGROUND) {
+        setAiResult(message.content);
+      }
+      sendResponse();
+    });
   }, []);
 
+  const handleClose = React.useCallback(() => {
+    setAiResult(null);
+  }, []);
+
+  return aiResult ? (
+    <Box
+      sx={{
+        width: "300px",
+        height: "auto",
+        position: "fixed",
+        bottom: "130px",
+        right: "130px",
+        backgroundColor: "lightblue",
+        p: 2,
+        zIndex: zIndexManager.get(),
+      }}
+    >
+      <Stack flexDirection="row" justifyContent="space-between">
+        <Typography variant="h5" sx={{ pb: 1 }}>
+          Fraud probability: {aiResult.probability}
+        </Typography>
+        <Typography onClick={handleClose} variant="h5" sx={{ pb: 1 }}>
+          Close
+        </Typography>
+      </Stack>
+      {aiResult.reasons.map((r) => (
+        <Typography variant="body2" sx={{ py: 1 }}>
+          {r}
+        </Typography>
+      ))}
+    </Box>
+  ) : null;
+}
+
+export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <StickyIcon />
+      <ResultPopup />
     </ThemeProvider>
   );
 }

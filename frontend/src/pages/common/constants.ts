@@ -4,8 +4,9 @@ export const MESSAGES = {
   },
   CONTENT: {
     MARKETPLACE: "fs-marketplace",
-    EMAIL: "fs-email"
+    EMAIL: "fs-email",
   },
+  BACKGROUND: "fs-ai-result",
 };
 
 export const storageKey = "fs-token";
