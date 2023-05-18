@@ -9,7 +9,7 @@ const manifest: chrome.runtime.ManifestV3 = {
   version: packageJson.version,
   description: packageJson.description,
   options_page: "src/pages/options/index.html",
-  permissions: ["scripting", "activeTab", "tabs"],
+  permissions: ["scripting", "activeTab", "tabs", "storage"],
   background: {
     service_worker: "src/pages/background/index.js",
     type: "module",
@@ -41,6 +41,10 @@ const manifest: chrome.runtime.ManifestV3 = {
       matches: ["*://*/*"],
     },
   ],
+  host_permissions: ["*://localhost/*"],
+  externally_connectable: {
+    matches: ["*://localhost/*"],
+  },
 };
 
 export default manifest;
