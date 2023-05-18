@@ -96,9 +96,6 @@ def create_user(user: User):
 def login(credentials: HTTPBasicCredentials = Depends(security)):
     with Session(engine) as session:
         user = authenticate_user(session, credentials.username, credentials.password)
-    response.set_cookie(
-        key="email", value=user.email, httponly=True, max_age=1800, expires=1800
-    )
     return {"status": "success", "email": user.email}
 
 
