@@ -32,6 +32,14 @@ class User(SQLModel, table=True):
     hashed_password: str
 
 
+class UsageLog(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user_id: int = Field(foreign_key="user.id")
+    endpoint: str
+    fraud_probability: int
+    created_at: str
+
+
 class Report(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     user_id: int = Field(foreign_key="user.id")
@@ -104,19 +112,48 @@ def create_report(report_request: ReportRequest):
     return report
 
 
-# AI stuff below
+def log_usage(user_email: str, endpoint: str, fraud_probability: int):
+    with Session(engine) as session:
+        user = get_user(session, user_email)
+        usage_log = UsageLog(
+            endpoint=endpoint,
+            fraud_probability=fraud_probability,
+            created_at=datetime.now().isoformat(),
+            user_id=user.id,
+        )
+        session.add(usage_log)
+        session.commit()
+        session.refresh(usage_log)
 
 
 @app.post("/ai/email_body", response_model=ai.Result, tags=["ai"])
 def process_email_body(email_request: ai.EmailRequest):
-    return ai.process_email_body(email_request)
+    response = ai.process_email_body(email_request)
+    log_usage(
+        email_request.user_email,
+        "/ai/email_body",
+        response.probability,
+    )
+    return response
 
 
 @app.post("/ai/marketplace", response_model=ai.Result, tags=["ai"])
 def process_marketplace(marketplace_request: ai.MarketplaceRequest):
-    return ai.process_marketplace(marketplace_request)
+    response = ai.process_marketplace(marketplace_request)
+    log_usage(
+        marketplace_request.user_email,
+        "/ai/marketplace",
+        response.probability,
+    )
+    return response
 
 
 @app.post("/ai/job_listing", response_model=ai.Result, tags=["ai"])
 def process_job_listing(job_listing_request: ai.JobListingRequest):
-    return ai.process_job_listing(job_listing_request)
+    response = ai.process_job_listing(job_listing_request)
+    log_usage(
+        job_listing_request.user_email,
+        "/ai/job_listing",
+        response.probability,
+    )
+    return response

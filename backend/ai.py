@@ -1,11 +1,13 @@
 import os
-import openai
+import functools
 
+import openai
 from pydantic import BaseModel
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
+@functools.lru_cache(maxsize=2**16)
 def get_completion(prompt, model="gpt-3.5-turbo"):
     messages = [{"role": "user", "content": prompt}]
     response = openai.ChatCompletion.create(
