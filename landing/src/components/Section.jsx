@@ -1,8 +1,8 @@
 import React from 'react';
 import { Grid, Typography, Box } from '@mui/material';
-import EngineeringOutlinedIcon from '@mui/icons-material/EngineeringOutlined';
-import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
-import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
+import Download from '@mui/icons-material/Download';
+import HowToReg from '@mui/icons-material/HowToReg';
+import Shield from '@mui/icons-material/Shield';
 import useStyles from '../styles/styles';
 
 const Section = () => {
@@ -11,20 +11,20 @@ const Section = () => {
   const sectionItems = [
     {
       id: 1,
-      icon: <EngineeringOutlinedIcon sx={{ fontSize: 100 }} color="primary" />,
+      icon: <Download sx={{ fontSize: 100 }} color="primary" />,
       sentence:
-        'Solving world problems through various web applications using efficient programs and tools',
+        'Install the FraudShield Chrome Extension',
     },
     {
       id: 2,
-      icon: <AllInclusiveIcon sx={{ fontSize: 100 }} color="primary" />,
+      icon: <HowToReg sx={{ fontSize: 100 }} color="primary" />,
       sentence:
-        'Through team work, we collaborate and deliver quality projects of high standards',
+        'Create an account.',
     },
     {
       id: 3,
-      icon: <PaidOutlinedIcon sx={{ fontSize: 100 }} color="primary" />,
-      sentence: 'Flexible payment plan is applicable to all our services',
+      icon: <Shield sx={{ fontSize: 100 }} color="primary" />,
+      sentence: 'Start broswing safely!',
     },
   ];
   return (
@@ -35,12 +35,12 @@ const Section = () => {
             item
             xs={12}
             md={3.5}
-            minHeight={300}
+            minHeight={250}
             key={item.id}
             className={classes.sectionGridItem}
           >
             {item.icon}
-            <Typography>{item.sentence}</Typography>
+            <Typography variant="h4">{item.sentence}</Typography>
           </Grid>
         ))}
       </Grid>

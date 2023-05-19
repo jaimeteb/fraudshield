@@ -1,5 +1,6 @@
 import { Grid, Typography, Button, Box } from "@mui/material";
-import myteam from "../images/myteam.jpg";
+// import myteam from "../images/myteam.jpg";
+import browsing from "../images/browsing.jpg";
 import useStyles from "../styles/styles";
 
 const Hero = () => {
@@ -14,8 +15,8 @@ const Hero = () => {
           </Typography>
           <Typography variant="h6" className={classes.subtitle}>
             FraudShield protects you during your online journey. Be aware of the
-            content of websites with simple Chrome Extension. Guaranteed fraud
-            detection in e-commerce, email and job ads.
+            content of websites with a simple Chrome Extension. Guaranteed fraud
+            detection in e-commerce, email, messaging applications and job ads.
           </Typography>
           <Button
             variant="contained"
@@ -26,7 +27,7 @@ const Hero = () => {
           </Button>
         </Grid>
         <Grid item xs={12} md={5}>
-          <img src={myteam} alt="My Team" className={classes.largeImage} />
+          <img src={browsing} alt="Browsing" className={classes.largeImage} />
         </Grid>
       </Grid>
     </Box>

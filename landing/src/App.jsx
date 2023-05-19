@@ -47,9 +47,9 @@ function App() {
       <Header />
       <Hero />
       <Section />
-      <AboutUs />
+      {/* <AboutUs />
       <Testimonial />
-      <ContactUs />
+      <ContactUs /> */}
       <Footer />
     </ThemeProvider>
   );
