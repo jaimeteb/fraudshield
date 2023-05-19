@@ -1,4 +1,4 @@
-# fraudshield
+# FraudShield
 
 ![logo](frontend/public/icon-128.png)
 
@@ -46,12 +46,12 @@ yarn
 yarn build
 ```
 
-Further steps:
+## Further steps
 - In Chrome browser open `chrome://extensions`
 - On the right of the screen enable "Developer mode"
 - Click "Load unpacked" and choose directory `/frontend/dist`
 - Extension will be installed to your browser
-- In order to register user open [http://localhost:8000/docs#/](http://localhost:8000/docs#/)
+- In order to register user open [http://localhost:8000/docs#/auth/create_user_signup_post](http://localhost:8000/docs#/auth/create_user_signup_post) 
 - Login in FraudShield chrome extension
 
 
