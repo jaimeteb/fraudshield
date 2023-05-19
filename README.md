@@ -51,7 +51,7 @@ Further steps:
 - On the right of the screen enable "Developer mode"
 - Click "Load unpacked" and choose directory `/frontend/dist`
 - Extension will be installed to your browser
-- In order to register user open http://localhost:8000
+- In order to register user open [http://localhost:8000/docs#/](http://localhost:8000/docs#/)
 - Login in FraudShield chrome extension
 
 
