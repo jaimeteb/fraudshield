@@ -95,8 +95,8 @@ const handleMarketPlace = async (
   if (res.ok) {
     const data = await res.json();
     sendAiResult(data);
-    chrome.storage.sync.set({ [statusKey]: "idle" });
   }
+  chrome.storage.sync.set({ [statusKey]: "idle" });
 };
 
 const handleEmail = async (body: string, sender: string, subject: string) => {
@@ -117,9 +117,9 @@ const handleEmail = async (body: string, sender: string, subject: string) => {
   });
   if (res.ok) {
     const data = await res.json();
-    chrome.storage.sync.set({ [statusKey]: "idle" });
     sendAiResult(data);
   }
+  chrome.storage.sync.set({ [statusKey]: "idle" });
 };
 
 const handleConversation = async (messages: string[]) => {
@@ -138,9 +138,9 @@ const handleConversation = async (messages: string[]) => {
   });
   if (res.ok) {
     const data = await res.json();
-    chrome.storage.sync.set({ [statusKey]: "idle" });
     sendAiResult(data);
   }
+  chrome.storage.sync.set({ [statusKey]: "idle" });
 };
 
 const handleJobListing = async (description: string, company: string) => {
@@ -160,9 +160,9 @@ const handleJobListing = async (description: string, company: string) => {
   });
   if (res.ok) {
     const data = await res.json();
-    chrome.storage.sync.set({ [statusKey]: "idle" });
     sendAiResult(data);
   }
+  chrome.storage.sync.set({ [statusKey]: "idle" });
 };
 
 const handleReportForm = async ({ fraudEmail, fraudWebsite, details }) => {
@@ -183,8 +183,8 @@ const handleReportForm = async ({ fraudEmail, fraudWebsite, details }) => {
   });
   if (res.ok) {
     const data = await res.json();
-    chrome.storage.sync.set({ [statusKey]: "idle" });
   }
+  chrome.storage.sync.set({ [statusKey]: "idle" });
 };
 
 const handleAnalyzeForm = async ({ fraudEmail, fraudWebsite }) => {
@@ -202,9 +202,9 @@ const handleAnalyzeForm = async ({ fraudEmail, fraudWebsite }) => {
   });
   if (res.ok) {
     const data = await res.json();
-    chrome.storage.sync.set({ [statusKey]: "idle" });
     sendAiAnalyzeResult(data);
   }
+  chrome.storage.sync.set({ [statusKey]: "idle" });
 };
 
 const handleStats = async () => {
