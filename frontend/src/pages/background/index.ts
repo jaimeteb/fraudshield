@@ -50,7 +50,7 @@ const sendAiResult = (result: any) => {
     chrome.tabs.sendMessage(
       tabs[0].id,
       { type: MESSAGES.BACKGROUND, content: result },
-      function (response) {}
+      function (response) { }
     );
   });
 };
@@ -60,7 +60,7 @@ const sendAiAnalyzeResult = (result: any) => {
     chrome.tabs.sendMessage(
       tabs[0].id,
       { type: MESSAGES.BACKGROUND_ANALYZE, content: result },
-      function (response) {}
+      function (response) { }
     );
   });
 };
@@ -105,7 +105,7 @@ const handleMarketPlace = async (
   chrome.storage.sync.set({ [statusKey]: "idle" });
 };
 
-const handleEmail = async (body: string) => {
+const handleEmail = async (body: string, sender: string, subject: string) => {
   chrome.storage.sync.set({ [statusKey]: "loading" });
   const userEmail = await getUserEmail();
 
@@ -115,7 +115,9 @@ const handleEmail = async (body: string) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      body,
+      body: body,
+      sender: sender,
+      subject: subject,
       user_email: userEmail,
     }),
   });
@@ -216,9 +218,9 @@ const handleStats = async () => {
 
   const res = await fetch(
     `${BASE}${ROUTES.GET_STATS}?` +
-      new URLSearchParams({
-        user_email: userEmail,
-      })
+    new URLSearchParams({
+      user_email: userEmail,
+    })
   );
   if (res.ok) {
     const data = await res.json();
@@ -249,7 +251,11 @@ chrome.runtime.onMessage.addListener(async function (
       );
       break;
     case MESSAGES.CONTENT.EMAIL:
-      handleEmail(content.body);
+      handleEmail(
+        content.body,
+        content.sender,
+        content.subject
+      );
       break;
     case MESSAGES.CONTENT.CONVERSATION:
       handleConversation(content.messages);

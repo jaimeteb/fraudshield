@@ -32,6 +32,8 @@ export interface Domain {
   sellerName?: string;
   sellerSelector?: string;
   bodySelector?: string;
+  senderSelector?: string;
+  subjectSelector?: string;
   messageInSelector?: string;
   messageOutSelector?: string;
   companySelector?: string;
@@ -51,6 +53,8 @@ export const domains: Domain[] = [
     hostname: "mail.google.com",
     type: "email",
     bodySelector: ".ii.gt",
+    senderSelector: ".go.gD",
+    subjectSelector: ".hP",
   },
   {
     hostname: "web.whatsapp.com",

@@ -21,6 +21,8 @@ def get_completion(prompt, model="gpt-3.5-turbo"):
 class EmailRequest(BaseModel):
     user_email: str
     body: str
+    sender: str
+    subject: str
 
 
 class MarketplaceRequest(BaseModel):
@@ -49,6 +51,8 @@ class ConversationRequest(BaseModel):
 def process_email_body(email_request: EmailRequest) -> Result:
     prompt = f"""
     The text delimited with triple backticks is the body of an email.
+    The email is from '{email_request.sender}'.
+    The subject of the email is '{email_request.subject}'.
     Determine a probability (percentage from 0 to 100) of this email being a fraud, scam or phishing.
     Provide some brief reasons why (maximum 3).
 
@@ -70,7 +74,7 @@ def process_email_body(email_request: EmailRequest) -> Result:
 def process_marketplace(marketplace_request: MarketplaceRequest) -> Result:
     prompt = f"""
     The text delimited with triple backticks is the description of a product in {marketplace_request.marketplace_name}.
-    The name of the seller is {marketplace_request.seller_name}.
+    The name of the seller is '{marketplace_request.seller_name}'.
     Determine a probability (percentage from 0 to 100) of this product being a fraud.
     Provide some brief reasons why (maximum 3).
 
