@@ -65,6 +65,8 @@ def process_email_body(email_request: EmailRequest) -> Result:
             "<reason 3>"
         ]
     }}
+    Provide the dictionary and nothing else.
+    
     ```{email_request.body}```
     """
     completion = get_completion(prompt)
@@ -87,6 +89,8 @@ def process_marketplace(marketplace_request: MarketplaceRequest) -> Result:
             "<reason 3>"
         ]
     }}
+    Provide the dictionary and nothing else.
+
     ```{marketplace_request.description}```
     """
     completion = get_completion(prompt)
@@ -114,6 +118,8 @@ def process_job_listing(job_listing_request: JobListingRequest) -> Result:
             "<reason 3>"
         ]
     }}
+    Provide the dictionary and nothing else.
+
     ```{job_listing_request.description}```
     """
     completion = get_completion(prompt)
@@ -148,6 +154,8 @@ def process_conversation(conversation_request: ConversationRequest) -> Result:
             .
         ]
     }}
+    Provide the dictionary and nothing else.
+
     ```{conversation_request.conversation}```
     """
     completion = get_completion(prompt)
