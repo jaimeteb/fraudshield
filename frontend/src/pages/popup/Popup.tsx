@@ -14,14 +14,6 @@ import {
 import { storageKey, positionKey } from "../common/constants";
 import { Signin } from "./components/Signin";
 
-/**
- * TODO:
- * - Pulse animation
- * - Signup
- * - More websites
- * - Form UX
- */
-
 const Popup = () => {
   const [email, setEmail] = React.useState("");
   const [enable, setEnable] = React.useState(true);
