@@ -30,11 +30,15 @@ uvicorn app:app
 ```
 
 ## Frontend
+
+First, run landing page locally.
+
 ```bash
 cd landing
 yarn
 yarn dev
 ```
+Second, build chrome extension.
 
 ```bash
 cd frontend
@@ -44,9 +48,10 @@ yarn build
 
 Further steps:
 - In Chrome browser open `chrome://extensions`
-- On the right of the screen enable Developer mode
-- Click load unpacked and choose directory `/frontend/dist`
+- On the right of the screen enable "Developer mode"
+- Click "Load unpacked" and choose directory `/frontend/dist`
 - Extension will be installed to your browser
+- In order to register user open http://localhost:8000
+- Login in FraudShield chrome extension
 
-## Landing Page
 
