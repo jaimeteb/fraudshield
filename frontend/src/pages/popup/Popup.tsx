@@ -6,6 +6,12 @@ import { Box, Typography, Stack, Button } from "@mui/material";
 import { storageKey } from "../common/constants";
 import { Signin } from "./components/Signin";
 
+/**
+ * TODO:
+ * - Toggle position
+ * - Disable
+ */
+
 const Popup = () => {
   const [email, setEmail] = React.useState("");
 

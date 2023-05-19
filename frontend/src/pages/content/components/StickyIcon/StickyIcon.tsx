@@ -34,17 +34,18 @@ function StickyIcon() {
     <Box
       onClick={handleClick}
       sx={{
-        width: "80px",
-        height: "80px",
+        width: "60px",
+        height: "60px",
         position: "fixed",
-        bottom: "50px",
-        right: "50px",
+        bottom: "30px",
+        right: "30px",
         zIndex: zIndexManager.get(),
         borderRadius: "50%",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "lightcoral",
+        background:
+          "linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%)",
         transition: "all 300ms",
         "&:hover": {
           boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
@@ -54,7 +55,11 @@ function StickyIcon() {
         },
       }}
     >
-      {isLoading ? "L" : ""}
+      {isLoading ? (
+        "L"
+      ) : (
+        <Box component="img" src={chrome.runtime.getURL("icon-34.png")} />
+      )}
     </Box>
   );
 }
