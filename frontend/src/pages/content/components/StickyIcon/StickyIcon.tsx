@@ -1,11 +1,12 @@
 import { Box, CircularProgress } from "@mui/material";
 import React from "react";
-import { statusKey } from "@src/pages/common/constants";
+import { statusKey, positionKey } from "@src/pages/common/constants";
 import { extractorFactory } from "@src/pages/content/services/extractor";
 import { zIndexManager } from "@src/pages/content/services/z-index";
 
 function StickyIcon() {
   const [isLoading, setIsLoading] = React.useState(false);
+  const [enable, setEnable] = React.useState(true);
 
   const handleClick = React.useCallback(() => {
     const extractorInstance = extractorFactory.get();
@@ -16,6 +17,14 @@ function StickyIcon() {
     const listener = (changes: {
       [key: string]: chrome.storage.StorageChange;
     }) => {
+      if (positionKey in changes) {
+        if (changes[positionKey].newValue) {
+          setEnable(true);
+        } else {
+          setEnable(false);
+        }
+      }
+
       if (statusKey in changes) {
         if (changes[statusKey].newValue === "loading") {
           setIsLoading(true);
@@ -38,7 +47,7 @@ function StickyIcon() {
         height: "60px",
         position: "fixed",
         bottom: "30px",
-        right: "30px",
+        ...(enable ? { right: "30px" } : { left: "30px" }),
         zIndex: zIndexManager.get(),
         borderRadius: "50%",
         display: "flex",

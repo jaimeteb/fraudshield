@@ -20,6 +20,8 @@ export const statusKey = "fs-status";
 export const statsUsed = "fs-stats-used";
 export const statsFraud = "fs-stats-fraud";
 export const statsReported = "fs-stats-reported";
+export const extEnabled = "fs-enabled";
+export const positionKey = "fs-position";
 
 export interface Domain {
   hostname?: string;
