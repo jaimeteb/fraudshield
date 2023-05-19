@@ -63,6 +63,18 @@ class EmailExtractor {
           .textContent.replace(/\s+/g, " ")
           .replace('"', "")
           .trim(),
+        sender: document
+          .querySelector(this.meta.senderSelector)
+          .textContent.replace(/\s+/g, " ")
+          .replace('"', "")
+          .replace('<', "")
+          .replace('>', "")
+          .trim(),
+        subject: document
+          .querySelector(this.meta.subjectSelector)
+          .textContent.replace(/\s+/g, " ")
+          .replace('"', "")
+          .trim(),
       },
     });
   }
