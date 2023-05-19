@@ -4,7 +4,11 @@ import { statusKey, positionKey } from "@src/pages/common/constants";
 import { extractorFactory } from "@src/pages/content/services/extractor";
 import { zIndexManager } from "@src/pages/content/services/z-index";
 
-function StickyIcon() {
+interface StickyIcon {
+  handleClickCb: () => void;
+}
+
+function StickyIcon({ handleClickCb } : StickyIcon) {
   const [isLoading, setIsLoading] = React.useState(false);
   const [enable, setEnable] = React.useState(true);
   const [hasNotification, setHasNotification] = React.useState(false);
@@ -13,7 +17,9 @@ function StickyIcon() {
 
   const handleClick = React.useCallback(() => {
     setHasNotification(false);
+    handleClickCb();
     const extractorInstance = extractorFactory.get();
+    if (!extractorInstance) return;
     extractorInstance.init();
   }, []);
 

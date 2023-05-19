@@ -150,6 +150,8 @@ class ExtractorFactory {
     const hostname = this.parseUrl();
     const websiteInfo = domains.find((d) => d.hostname === hostname);
 
+    if (!websiteInfo) return;
+
     switch (websiteInfo.type) {
       case "marketplace":
         return new MarketplaceExtractor(websiteInfo);
