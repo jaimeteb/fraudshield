@@ -15,3 +15,17 @@ frontend/dist
 frontend/utils/reload/*.js
 frontend/utils/reload/injections/*.js
 frontend/public/manifest.json
+
+# Logs
+lading/logs
+lading/*.log
+lading/npm-debug.log*
+lading/yarn-debug.log*
+lading/yarn-error.log*
+lading/pnpm-debug.log*
+lading/lerna-debug.log*
+
+landing/node_modules
+landing/dist
+landing/dist-ssr
+landing/*.local
