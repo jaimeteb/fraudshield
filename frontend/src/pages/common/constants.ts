@@ -53,7 +53,7 @@ export const domains: Domain[] = [
     hostname: "mail.google.com",
     type: "email",
     bodySelector: ".ii.gt",
-    senderSelector: ".go.gD",
+    senderSelector: ".go",
     subjectSelector: ".hP",
   },
   {
