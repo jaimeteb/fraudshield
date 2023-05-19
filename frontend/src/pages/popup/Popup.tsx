@@ -10,6 +10,10 @@ import { Signin } from "./components/Signin";
  * TODO:
  * - Toggle position
  * - Disable
+ * - Pulse animation
+ * - Signup
+ * - More websites
+ * - Form UX
  */
 
 const Popup = () => {

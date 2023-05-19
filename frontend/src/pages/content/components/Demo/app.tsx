@@ -3,7 +3,8 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
-import { Box, Typography, Stack, Button } from "@mui/material";
+import { Box, Typography, Stack, Button, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "@src/pages/common/styles";
 import React from "react";
@@ -55,9 +56,10 @@ function ResultPopup() {
         position: "fixed",
         bottom: "90px",
         right: "90px",
-        backgroundColor: "lightblue",
+        backgroundColor: "#f4f0ec",
         p: 2,
         zIndex: zIndexManager.get(),
+        borderRadius: "10px",
       }}
     >
       {showReportForm ? (
@@ -66,13 +68,18 @@ function ResultPopup() {
         <AnalyzeForm handleClose={handleClose} />
       ) : (
         <>
-          <Stack flexDirection="row" justifyContent="space-between">
-            <Typography variant="h5" sx={{ pb: 1 }}>
-              Fraud probability: {aiResult.probability}
+          <Stack
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+            sx={{ pb: 1 }}
+          >
+            <Typography variant="h6">
+              Fraud probability: {aiResult.probability}%
             </Typography>
-            <Typography onClick={handleClose} variant="h5" sx={{ pb: 1 }}>
-              Close
-            </Typography>
+            <IconButton aria-label="close" onClick={handleClose}>
+              <CloseIcon />
+            </IconButton>
           </Stack>
           {aiResult.reasons.map((r) => (
             <Typography variant="body2" sx={{ py: 1 }}>

@@ -1,8 +1,16 @@
 import React from "react";
-import { Box, TextField, Stack, Button, Typography } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Stack,
+  Button,
+  Typography,
+  IconButton,
+} from "@mui/material";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { MESSAGES } from "@src/pages/common/constants";
+import CloseIcon from "@mui/icons-material/Close";
 
 const formStyles = {
   mt: 2,
@@ -55,13 +63,15 @@ function AnalyzeForm({ handleClose }: ReportFormInterface) {
 
   return (
     <Box component="form" onSubmit={formik.handleSubmit} sx={formStyles}>
-      <Stack flexDirection="row" justifyContent="space-between">
-        <Typography variant="h5" sx={{ pb: 1 }}>
-          Analyze email or website
-        </Typography>
-        <Typography onClick={handleClose} variant="h5" sx={{ pb: 1 }}>
-          Close
-        </Typography>
+      <Stack
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Typography variant="h5">Analyze email or website</Typography>
+        <IconButton aria-label="close" onClick={handleClose}>
+          <CloseIcon />
+        </IconButton>
       </Stack>
       {aiResult ? (
         <Stack justifyContent="space-between" gap="20px">

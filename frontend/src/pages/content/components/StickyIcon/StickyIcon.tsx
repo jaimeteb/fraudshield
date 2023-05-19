@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import React from "react";
 import { statusKey } from "@src/pages/common/constants";
 import { extractorFactory } from "@src/pages/content/services/extractor";
@@ -44,8 +44,7 @@ function StickyIcon() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background:
-          "linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%)",
+        background: "linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%)",
         transition: "all 300ms",
         "&:hover": {
           boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
@@ -56,7 +55,7 @@ function StickyIcon() {
       }}
     >
       {isLoading ? (
-        "L"
+        <CircularProgress color="primary" />
       ) : (
         <Box component="img" src={chrome.runtime.getURL("icon-34.png")} />
       )}

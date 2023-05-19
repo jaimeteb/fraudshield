@@ -1,5 +1,13 @@
 import React from "react";
-import { Box, TextField, Stack, Button, Typography } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import {
+  Box,
+  TextField,
+  Stack,
+  Button,
+  Typography,
+  IconButton,
+} from "@mui/material";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { MESSAGES } from "@src/pages/common/constants";
@@ -47,13 +55,15 @@ function ReportForm({ handleClose }: ReportFormInterface) {
 
   return (
     <Box component="form" onSubmit={formik.handleSubmit} sx={formStyles}>
-      <Stack flexDirection="row" justifyContent="space-between">
-        <Typography variant="h5" sx={{ pb: 1 }}>
-          Report fraud content
-        </Typography>
-        <Typography onClick={handleClose} variant="h5" sx={{ pb: 1 }}>
-          Close
-        </Typography>
+      <Stack
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Typography variant="h5">Report fraud content</Typography>
+        <IconButton aria-label="close" onClick={handleClose}>
+          <CloseIcon />
+        </IconButton>
       </Stack>
       <TextField
         error={formik.touched.fraudEmail && Boolean(formik.errors.fraudEmail)}
