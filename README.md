@@ -30,8 +30,23 @@ uvicorn app:app
 ```
 
 ## Frontend
+```bash
+cd landing
+yarn
+yarn dev
+```
 
+```bash
+cd frontend
+yarn
+yarn build
+```
 
+Further steps:
+- In Chrome browser open `chrome://extensions`
+- On the right of the screen enable Developer mode
+- Click load unpacked and choose directory `/frontend/dist`
+- Extension will be installed to your browser
 
 ## Landing Page
 
