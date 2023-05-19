@@ -16,6 +16,12 @@ reloadOnUpdate("pages/background");
  */
 reloadOnUpdate("pages/content/style.scss");
 
+chrome.runtime.onInstalled.addListener((object) => {
+  if (object.reason === chrome.runtime.OnInstalledReason.INSTALL) {
+    chrome.tabs.create({ url: "http://localhost:3001/" });
+  }
+});
+
 const BASE = "http://localhost:8000";
 
 const ROUTES = {
